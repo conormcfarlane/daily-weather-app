@@ -54,6 +54,17 @@
   src: url("assets/fonts/bricolage-grotesque-v9-latin-700.woff2")
     format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
+@theme {
+  /* Font sizes */
+  --fs-96: calc(96 / 16 * 1rem);
+  --fs-52: calc(52 / 16 * 1rem);
+  --fs-32: calc(32 / 16 * 1rem);
+  --fs-28: calc(28 / 16 * 1rem);
+  --fs-20: calc(20 / 16 * 1rem);
+  --fs-18: calc(18 / 16 * 1rem);
+  --fs-16: calc(16 / 16 * 1rem);
+  --fs-14: calc(14 / 16 * 1rem);
+}
 
 :root {
   /* Neutral */
@@ -66,20 +77,10 @@
   --color-neutral-0-hsl: hsl(0 0% 100%);
   /* Orange */
   --color-orange-500-hsl: hsl(28 100% 52%);
-  /* Blue */
 
+  /* Blue */
   --color-blue-500-hsl: hsl(233 67% 56%);
   --color-blue-700-hsl: hsl(248 70% 36%);
-
-  /* Font sizes */
-  /* --fs-96: calc(96 / 16 * 1rem);
-  --fs-52: calc(52 / 16 * 1rem);
-  --fs-32: calc(32 / 16 * 1rem);
-  --fs-28: calc(28 / 16 * 1rem);
-  --fs-20: calc(20 / 16 * 1rem);
-  --fs-18: calc(18 / 16 * 1rem);
-  --fs-16: calc(16 / 16 * 1rem);
-  --fs-14: calc(14 / 16 * 1rem); */
 }
 body {
   font-family: "DM Sans", Arial, Helvetica, sans-serif;
@@ -90,4 +91,18 @@ h1,
 h2,
 h3 {
   font-family: "Bricolage Grotesque", Arial, Helvetica, sans-serif;
+}
+
+/* Background for CurrentForecast Small */
+.cureent-forecast {
+  background-image: url("./assets/images/bg-today-small.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+/* Background for CurrentForecast Medium and Large */
+@media (min-width: 768px) {
+  .cureent-forecast {
+    background-image: url("./assets/images/bg-today-large.svg");
+  }
 }
