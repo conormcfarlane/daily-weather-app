@@ -87,10 +87,12 @@ body {
   font-weight: 500;
   color: white;
 }
-h1,
-h2,
-h3 {
+h1 {
   font-family: "Bricolage Grotesque", Arial, Helvetica, sans-serif;
+}
+h2 {
+  font-size: var(--fs-20);
+  font-weight: 600;
 }
 
 /* Background for CurrentForecast Small */
