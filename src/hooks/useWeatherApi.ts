@@ -1,47 +1,81 @@
-import { useState,useEffect } from "react";
 
-export function useWeatherApi() {
-    const [data,setData] = useState("");
-    const [loading,setLoading] = useState(false);
-    const [error,setError] = useState(false);
+import { useEffect,useState } from "react";
 
-    useEffect(() => {
-        let search = "Madrid"
-        const fetchGeoLocationData = async () => {
-            try{
-                const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${search}&count=1&language=en&format=json`);
-                
-                if(!geoResponse.ok){
-                    throw new Error(`HTTP error! status: ${geoResponse.status}`);
-                }
-                const geoResult = await  geoResponse.json();
-                console.log('georesult - ' , geoResult)
-                const {latitude,longitude} = geoResult.results[0];
-                fetchWeatherData(latitude,longitude);
+ type GeoCodeResultItem = {
+    latitude:number;
+    longitude:number;
+    country?:string;
+ }
+ type GeoCodeResponse = {
+    results?: GeoCodeResultItem[];
+ }
+ export type WeatherResponseItem = {
+    current?:{
+        apparent_temperature:number;
+        relative_humidity_2m:number;
+        temperature_2m:number;
+        precipitation:number;
+        weather_code:number;
+        wind_speed_10m:number;
+    };
+    daily?:{
+        temperature_2m_max: number[];
+        temperature_2m_min: number[];
+        weather_code:number[];
+        time:number[];
+    };
+    hourly?:{
+        time:number[];
+        temperature_2m: number;
+        weather_code: number;
+    }
 
-            }catch(error){            
-            setError(error)
-        }finally{
-            setLoading(false)
-        }
-        }
-        fetchGeoLocationData();
+ }
 
-        const fetchWeatherData = async (latitude,longitude) => {
-            try{
-                const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m`)
-                if(!weatherResponse.ok){
-                    throw new Error(`HTTP error! status: ${weatherResponse.status}`)
-                }
-                const weatherResult = await weatherResponse.json();
-                console.log('The weather ', weatherResult);
-            }catch{
-                setError(error);
-            }finally{
-                setLoading(false);
+export function useWeatherApi(){
+    const [data,setData] = useState<WeatherResponseItem | null>(null);
+    const [loading,setLoading] = useState<boolean>(false);
+    const [error,setError] = useState<any | null>(null);
+
+   useEffect(() => {
+    const fetchWeatherData = async () => {
+        try{
+            setLoading(true);
+            // 1.Fetch geoData
+            const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=Berlin&count=10&language=en&format=json`)
+            if(!geoResponse.ok){
+                throw new Error(`HTTP Error: ${geoResponse.status}`)
             }
+            const geoData = (await geoResponse.json()) as GeoCodeResponse;
+            const firstResult = geoData?.results?.[0];
+            if(!firstResult){
+                 setError(new Error("No geocoding results"));
+              setLoading(false);
+              return;
+            }
+            const {latitude,longitude,country} = firstResult;
+            console.log(latitude,longitude,country);
+           
+            
+            
+            // 2.Fetch Weather Data using LAT + LONG
+            const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m`)
+            if(!weatherResponse.ok){
+                throw new Error(`HTTP Error ${weatherResponse.status}`)
+            }
+            const weatherData = (await weatherResponse.json()) as WeatherResponseItem;
+              console.log(weatherData);
+            setData(weatherData);
+         
+        }catch(error){
+            setError(error);
+        }finally{
+            setLoading(false);
         }
-    },[])
-
+    }
+    fetchWeatherData();
+     
+   },[])
+   return {data,loading,error};
 
 }

@@ -10,7 +10,7 @@ export default function Layout() {
       <div className="col-start-2 space-y-8 ">
         <Header />
         <div>
-          <h1 className="text-center text-(length:--fs-52) md:max-w-[14ch] mx-auto lg:max-w-none  ">
+          <h1 className="text-center text-(length:--fs-52) md:max-w-[13ch] mx-auto lg:max-w-none  ">
             How's the sky looking today ?
           </h1>
         </div>
