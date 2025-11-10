@@ -2,6 +2,7 @@
 import { useEffect,useState } from "react";
 
  type GeoCodeResultItem = {
+    name:string;
     latitude:number;
     longitude:number;
     country?:string;
@@ -31,30 +32,38 @@ import { useEffect,useState } from "react";
     }
 
  }
-
+ type LocationItems = {
+    name:string;
+    country?: string;
+ }
+ 
 export function useWeatherApi(){
     const [data,setData] = useState<WeatherResponseItem | null>(null);
     const [loading,setLoading] = useState<boolean>(false);
     const [error,setError] = useState<any | null>(null);
+    const [location,setLocation] = useState<LocationItems | null>(null)
 
    useEffect(() => {
     const fetchWeatherData = async () => {
         try{
             setLoading(true);
             // 1.Fetch geoData
-            const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=Berlin&count=10&language=en&format=json`)
+            let query = 'Dublin';
+            const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=en&format=json`)
             if(!geoResponse.ok){
                 throw new Error(`HTTP Error: ${geoResponse.status}`)
             }
             const geoData = (await geoResponse.json()) as GeoCodeResponse;
+            console.log(geoData)
             const firstResult = geoData?.results?.[0];
             if(!firstResult){
                  setError(new Error("No geocoding results"));
               setLoading(false);
               return;
             }
-            const {latitude,longitude,country} = firstResult;
-            console.log(latitude,longitude,country);
+            const {latitude,longitude,country,name} = firstResult;
+            setLocation({name,country})
+            console.log(latitude,longitude,country,name);
            
             
             
@@ -66,7 +75,7 @@ export function useWeatherApi(){
             const weatherData = (await weatherResponse.json()) as WeatherResponseItem;
               console.log(weatherData);
             setData(weatherData);
-         
+            
         }catch(error){
             setError(error);
         }finally{
@@ -76,6 +85,6 @@ export function useWeatherApi(){
     fetchWeatherData();
      
    },[])
-   return {data,loading,error};
+   return {data,loading,error,location};
 
 }
