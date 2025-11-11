@@ -16,6 +16,13 @@ export default function () {
     { title: "Wind", value: "14", unit: "km/h" },
     { title: "Precipitation", value: "0", unit: "mm" },
   ];
+
+  const date = new Date();
+  const weekday = date.toLocaleDateString("en-GB", { weekday: "long" });
+  const day = date.toLocaleDateString("en-GB", { day: "numeric" });
+  const month = date.toLocaleDateString("en-GB", { month: "short" });
+  const year = date.toLocaleDateString("en-GB", { year: "numeric" });
+  const customDate = `${weekday}  ${month}, ${day} ${year}`;
   return (
     <section className="space-y-8 lg:space-y-11">
       <section className="cureent-forecast px-6 py-11 bg-no-repeat bg-cover bg-center rounded-2xl md:flex md:items-center md:justify-between">
@@ -23,9 +30,8 @@ export default function () {
           <p>
             {city}, {country}
           </p>
-          <p className="text-(length:--fs-18) font-medium">
-            Tuesday, Aug 5, 2025
-          </p>
+
+          <p className="text-(length:--fs-18) font-medium">{customDate}</p>
         </div>
         <div className="flex items-center justify-between">
           <img

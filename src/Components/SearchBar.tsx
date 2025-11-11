@@ -1,13 +1,13 @@
 import { useState } from "react";
 import iconSearch from "../assets/images/icon-search.svg";
-import { useWeatherApi } from "../Hooks/useWeatherApi";
+import { useWeatherData } from "../Context/WeatherDataContext";
 
 export default function SearchBar() {
-
-  const [queryValue, setQueryValue] = useState<string>("Berlin");
+  const { setSearchValue } = useWeatherData();
   const [inputValue, setInputValue] = useState<string>("");
   const handleInputSearch = () => {
-    setQueryValue(inputValue);
+    const q = inputValue.trim();
+    if (q) setSearchValue(q);
   };
   return (
     <section className="flex flex-col gap-3 md:flex-row lg:max-w-5/10 lg:mx-auto">
@@ -16,11 +16,12 @@ export default function SearchBar() {
         <input
           type="text"
           placeholder="Search for a place"
-          className="text-(length:--fs-20) font-semibold"
+          className="text-(length:--fs-20) font-semibold outline-none border-none"
           value={inputValue}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setInputValue(e.target.value)
           }
+          onKeyDown={(e) => e.key === "Enter" && handleInputSearch()}
         />
       </div>
       <button
