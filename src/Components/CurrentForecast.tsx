@@ -1,5 +1,6 @@
 import iconSunny from "../assets/images/icon-sunny.webp";
 import { useWeatherApi } from "../Hooks/useWeatherApi";
+import { getWeatherIcon } from "../Utils/WeatherIconHelper";
 
 export default function () {
   const { data, loading, error, location } = useWeatherApi();
@@ -23,6 +24,12 @@ export default function () {
   const month = date.toLocaleDateString("en-GB", { month: "short" });
   const year = date.toLocaleDateString("en-GB", { year: "numeric" });
   const customDate = `${weekday}  ${month}, ${day} ${year}`;
+
+  const weatherCode = data?.current?.weather_code;
+  const icon = weatherCode != null ? getWeatherIcon(weatherCode) : undefined;
+  const iconSrc = icon?.src;
+  const iconAlt = icon?.alt;
+
   return (
     <section className="space-y-8 lg:space-y-11">
       <section className="cureent-forecast px-6 py-11 bg-no-repeat bg-cover bg-center rounded-2xl md:flex md:items-center md:justify-between">
@@ -34,11 +41,7 @@ export default function () {
           <p className="text-(length:--fs-18) font-medium">{customDate}</p>
         </div>
         <div className="flex items-center justify-between">
-          <img
-            src={iconSunny}
-            alt="weather code symbol"
-            className="w-30 h-30"
-          />
+          <img src={iconSrc} alt={iconAlt} className="w-30 h-30" />
           <div className="flex text-(length:--fs-96)">
             <p>{currentTemp}</p>
             <span>&deg;</span>
