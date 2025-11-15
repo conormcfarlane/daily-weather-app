@@ -2,20 +2,45 @@ import iconSunny from "../assets/images/icon-sunny.webp";
 import { useWeatherApi } from "../Hooks/useWeatherApi";
 import { getWeatherIcon } from "../Utils/WeatherIconHelper";
 
+type currentWeatherCards = {
+  title: string;
+  value: number | undefined;
+  unit: any;
+};
+
 export default function () {
   const { data, loading, error, location } = useWeatherApi();
   const city = location?.name;
   const country = location?.country;
+  const currentForecast = data?.current;
   const currentTemp =
-    data?.current?.temperature_2m != null
-      ? Math.round(data?.current?.temperature_2m)
+    currentForecast?.temperature_2m != null
+      ? Math.round(currentForecast?.temperature_2m)
       : null;
 
-  const currentWeatherCards = [
-    { title: "Feels like", value: "18", unit: "°C" },
-    { title: "Humidity", value: "46", unit: "%" },
-    { title: "Wind", value: "14", unit: "km/h" },
-    { title: "Precipitation", value: "0", unit: "mm" },
+  // Values for currentWeatherCards
+  const apparentTemp =
+    currentForecast?.apparent_temperature != null
+      ? Math.round(currentForecast.apparent_temperature)
+      : undefined;
+  const humidity =
+    currentForecast?.relative_humidity_2m != null
+      ? Math.round(currentForecast.relative_humidity_2m)
+      : undefined;
+  const wind =
+    currentForecast?.wind_speed_10m != null
+      ? Math.round(currentForecast.wind_speed_10m)
+      : undefined;
+  const precipiation =
+    currentForecast?.precipitation != null
+      ? Math.round(currentForecast.precipitation)
+      : undefined;
+
+  const currentWeatherCards: currentWeatherCards[] = [
+    { title: "Feels like", value: apparentTemp, unit: "°C" },
+    { title: "Humidity", value: humidity, unit: "%" },
+    { title: "Wind", value: wind, unit: "km/h" },
+    { title: "Precipitation", value: precipiation, unit: "mm" },
   ];
 
   const date = new Date();
@@ -25,7 +50,7 @@ export default function () {
   const year = date.toLocaleDateString("en-GB", { year: "numeric" });
   const customDate = `${weekday}  ${month}, ${day} ${year}`;
 
-  const weatherCode = data?.current?.weather_code;
+  const weatherCode = currentForecast?.weather_code;
   const icon = weatherCode != null ? getWeatherIcon(weatherCode) : undefined;
   const iconSrc = icon?.src;
   const iconAlt = icon?.alt;
@@ -59,8 +84,9 @@ export default function () {
                 {card.title}
               </p>
               <div className="flex text-(length:--fs-32) font-light">
-                <p>{card.value}</p>
-                <p>{card.unit}</p>
+                <p>
+                  {card.value} {card.unit}
+                </p>
               </div>
             </div>
           );

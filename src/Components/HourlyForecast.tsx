@@ -1,6 +1,9 @@
 import iconSunny from "../assets/images/icon-sunny.webp";
+import { useWeatherApi } from "../Hooks/useWeatherApi";
 
 export default function HourlyForecast() {
+  const {data} = useWeatherApi();
+  const hourlyData = data?.hourly;
   const hourlyForecastCards = [
     { weatherCode: 1, timeHour: "6", timeShort: "PM", temp: 20 },
     { weatherCode: 2, timeHour: "2", timeShort: "PM", temp: 20 },
@@ -45,6 +48,11 @@ export default function HourlyForecast() {
               <p>{card.temp}&deg;</p>
             </div>
           );
+        })}
+        {hourlyData?.time.slice(0,24).map((timeMark) => {
+          return(
+            <p>{timeMark}</p>
+          )
         })}
       </div>
     </section>
