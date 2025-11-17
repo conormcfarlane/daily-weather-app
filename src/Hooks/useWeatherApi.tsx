@@ -27,8 +27,8 @@ export type WeatherResponseItem = {
   };
   hourly?: {
     time: number[];
-    temperature_2m: number;
-    weather_code: number;
+    temperature_2m: number[];
+    weather_code: number[] | undefined;
   };
 };
 type LocationItems = {

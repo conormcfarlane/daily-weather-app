@@ -6,8 +6,8 @@ import HourlyForecast from "./HourlyForecast";
 
 export default function Layout() {
   return (
-    <div className=" bg-(--color-neutral-900-hsl) grid grid-cols-[1fr_calc(100%-2rem)_1fr] pt-4 md:grid-cols-[1fr_calc(100%-3rem)_1fr] md:pt-6 lg:grid-cols-[1fr_1216px_1fr] pb-20 ">
-      <div className="col-start-2 space-y-8 ">
+    <div className=" bg-(--color-neutral-900-hsl) pt-4 pb-20 px-1 md:px-6 min-h-screen ">
+      <div className="col-start-2 space-y-8 max-w-[1216px] mx-auto ">
         <Header />
         <div>
           <h1 className="text-center text-(length:--fs-52) md:max-w-[13ch] mx-auto lg:max-w-none  ">

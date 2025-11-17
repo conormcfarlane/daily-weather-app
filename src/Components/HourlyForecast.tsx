@@ -1,26 +1,16 @@
+import { useState } from "react";
 import iconSunny from "../assets/images/icon-sunny.webp";
 import { useWeatherApi } from "../Hooks/useWeatherApi";
+import { getWeatherIcon } from "../Utils/WeatherIconHelper";
 
 export default function HourlyForecast() {
-  const {data} = useWeatherApi();
+  const [selectedDayIndex, setSelectedDayIndex] = useState<number>(0);
+
+  const { data } = useWeatherApi();
+  const dailyWeather = data?.daily;
   const hourlyData = data?.hourly;
-  const hourlyForecastCards = [
-    { weatherCode: 1, timeHour: "6", timeShort: "PM", temp: 20 },
-    { weatherCode: 2, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-    { weatherCode: 1, timeHour: "2", timeShort: "PM", temp: 20 },
-  ];
+  const startIndex = 24 * selectedDayIndex;
+  const endIndex = startIndex + 24;
   return (
     <section className="bg-(--color-neutral-800-hsl) rounded-xl px-4 py-6 space-y-4 lg:max-h-172 lg:overflow-y-auto">
       <div className="flex justify-between">
@@ -28,32 +18,61 @@ export default function HourlyForecast() {
         <select
           name="dayOfWeek"
           id=""
-          className="bg-(--color-neutral-600-hsl) px-4 py-2 rounded-xl"
+          className="bg-(--color-neutral-600-hsl) px-4 py-2 rounded-xl cursor-pointer"
+          value={selectedDayIndex}
+          onChange={(e) => setSelectedDayIndex(Number(e.target.value))}
         >
-          <option value="">Tuesday</option>
-          <option value="">Wednesday</option>
+          {dailyWeather?.time.map((dayTimeStamp, dayTimeStampindex) => {
+            console.log(selectedDayIndex);
+            const dayTimeStampFormatted = new Date(
+              dayTimeStamp
+            ).toLocaleDateString("en-GB", { weekday: "long" });
+            return (
+              <option className="cursor-pointer" value={dayTimeStampindex}>{dayTimeStampFormatted} </option>
+            );
+          })}
         </select>
       </div>
       <div className="grid grid-row-auto gap-4">
-        {hourlyForecastCards.map((card,index) => {
-          return (
-            <div key={index} className="flex justify-between items-center px-4 py-2.5 bg-(--color-neutral-700-hsl)  rounded-xl">
-              <div className="flex text-(length:--fs-20) items-center">
-                <img src={iconSunny} alt="" className="w-10 h-10" />
-                <div className="flex gap-2">
-                  <p>{card.timeHour} </p>
-                  <p>{card.timeShort}</p>
+        {hourlyData?.time
+          .slice(startIndex, endIndex)
+          .map((timeMark, timeMarkIndex) => {
+            const actualIndex = startIndex + timeMarkIndex;
+            const timeFormatted = new Date(timeMark).toLocaleTimeString(
+              "en-GB",
+              {
+                hour: "numeric",
+                hour12: true,
+              }
+            );
+            const hourlyTemp =
+              hourlyData?.temperature_2m[actualIndex] != null
+                ? Math.round(hourlyData.temperature_2m[actualIndex])
+                : undefined;
+            const hourlyWeatherCode = (
+              hourlyData?.weather_code as number[] | undefined
+            )?.[actualIndex];
+            const hourlyIcon =
+              hourlyWeatherCode != null
+                ? getWeatherIcon(hourlyWeatherCode)
+                : undefined;
+            return (
+              <div className="flex justify-between items-center px-4 py-2.5 bg-(--color-neutral-700-hsl)  rounded-xl">
+                <div className="flex text-(length:--fs-20) items-center">
+                  <img
+                    src={hourlyIcon?.src}
+                    alt={hourlyIcon?.alt}
+                    className="w-10 h-10"
+                  />
+                  <div className="flex gap-2">
+                    <p>{timeFormatted}</p>
+                    <p></p>
+                  </div>
                 </div>
+                <p>{hourlyTemp}</p>
               </div>
-              <p>{card.temp}&deg;</p>
-            </div>
-          );
-        })}
-        {hourlyData?.time.slice(0,24).map((timeMark) => {
-          return(
-            <p>{timeMark}</p>
-          )
-        })}
+            );
+          })}
       </div>
     </section>
   );
