@@ -1,4 +1,5 @@
 import iconSunny from "../assets/images/icon-sunny.webp";
+import { useWeatherData } from "../Context/WeatherDataContext";
 import { useWeatherApi } from "../Hooks/useWeatherApi";
 import { getWeatherIcon } from "../Utils/WeatherIconHelper";
 
@@ -10,6 +11,7 @@ type currentWeatherCards = {
 
 export default function () {
   const { data, loading, error, location } = useWeatherApi();
+  const { units } = useWeatherData();
   const city = location?.name;
   const country = location?.country;
   const currentForecast = data?.current;
@@ -37,10 +39,10 @@ export default function () {
       : undefined;
 
   const currentWeatherCards: currentWeatherCards[] = [
-    { title: "Feels like", value: apparentTemp, unit: "°C" },
+    { title: "Feels like", value: apparentTemp, unit: "°" },
     { title: "Humidity", value: humidity, unit: "%" },
-    { title: "Wind", value: wind, unit: "km/h" },
-    { title: "Precipitation", value: precipiation, unit: "mm" },
+    { title: "Wind", value: wind, unit: units.windSpeed },
+    { title: "Precipitation", value: precipiation, unit: units.precipitation },
   ];
 
   const date = new Date();

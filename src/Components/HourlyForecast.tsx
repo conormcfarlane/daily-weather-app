@@ -1,5 +1,4 @@
 import { useState } from "react";
-import iconSunny from "../assets/images/icon-sunny.webp";
 import { useWeatherApi } from "../Hooks/useWeatherApi";
 import { getWeatherIcon } from "../Utils/WeatherIconHelper";
 
@@ -23,12 +22,13 @@ export default function HourlyForecast() {
           onChange={(e) => setSelectedDayIndex(Number(e.target.value))}
         >
           {dailyWeather?.time.map((dayTimeStamp, dayTimeStampindex) => {
-            console.log(selectedDayIndex);
             const dayTimeStampFormatted = new Date(
               dayTimeStamp
             ).toLocaleDateString("en-GB", { weekday: "long" });
             return (
-              <option className="cursor-pointer" value={dayTimeStampindex}>{dayTimeStampFormatted} </option>
+              <option className="cursor-pointer" value={dayTimeStampindex}>
+                {dayTimeStampFormatted}{" "}
+              </option>
             );
           })}
         </select>

@@ -5,15 +5,6 @@ export default function DailyForecast() {
   const { data, loading, error } = useWeatherApi();
   const dailyWeather = data?.daily;
 
-  // const dailyForecastCards: DailyForecastCardData[] = [
-  //   { titleDay: "Tue", weatherCode: 3, maxTemp: 23, minTemp: 3 },
-  //   { titleDay: "Wed", weatherCode: 3, maxTemp: 23, minTemp: 3 },
-  //   { titleDay: "Thur", weatherCode: 3, maxTemp: 23, minTemp: 3 },
-  //   { titleDay: "Fri", weatherCode: 3, maxTemp: 23, minTemp: 3 },
-  //   { titleDay: "Sat", weatherCode: 3, maxTemp: 23, minTemp: 3 },
-  //   { titleDay: "Sun", weatherCode: 3, maxTemp: 23, minTemp: 3 },
-  //   { titleDay: "Mon", weatherCode: 3, maxTemp: 23, minTemp: 4 },
-  // ];
   return (
     <section className="space-y-5">
       <h2>Daily forecast</h2>
