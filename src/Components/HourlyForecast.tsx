@@ -11,7 +11,7 @@ export default function HourlyForecast() {
   const startIndex = 24 * selectedDayIndex;
   const endIndex = startIndex + 24;
   return (
-    <section className="bg-(--color-neutral-800-hsl) rounded-xl px-4 py-6 space-y-4 lg:max-h-172 lg:overflow-y-auto">
+    <section className="bg-(--color-neutral-800-hsl) rounded-xl px-4 py-6 space-y-4 max-h-171 overflow-y-auto">
       <div className="flex justify-between">
         <h2>Hourly forecast</h2>
         <select
@@ -26,7 +26,11 @@ export default function HourlyForecast() {
               dayTimeStamp
             ).toLocaleDateString("en-GB", { weekday: "long" });
             return (
-              <option className="cursor-pointer" value={dayTimeStampindex}>
+              <option
+                key={dayTimeStamp}
+                className="cursor-pointer"
+                value={dayTimeStampindex}
+              >
                 {dayTimeStampFormatted}{" "}
               </option>
             );
@@ -57,7 +61,10 @@ export default function HourlyForecast() {
                 ? getWeatherIcon(hourlyWeatherCode)
                 : undefined;
             return (
-              <div className="flex justify-between items-center px-4 py-2.5 bg-(--color-neutral-700-hsl)  rounded-xl">
+              <div
+                key={timeMark}
+                className="flex justify-between items-center px-4 py-2.5 bg-(--color-neutral-700-hsl)  rounded-xl"
+              >
                 <div className="flex text-(length:--fs-20) items-center">
                   <img
                     src={hourlyIcon?.src}

@@ -57,6 +57,21 @@ export default function () {
   const iconSrc = icon?.src;
   const iconAlt = icon?.alt;
 
+  if (loading) {
+    return (
+      <section className="space-y-8 lg:space-y-11">
+        <div className="cureent-forecast px-6 py-11 bg-(--color-neutral-800-hsl) rounded-2xl animate-pulse h-48" />
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="bg-(--color-neutral-800-hsl) rounded-xl h-32 animate-pulse"
+            />
+          ))}
+        </div>
+      </section>
+    );
+  }
   return (
     <section className="space-y-8 lg:space-y-11">
       <section className="cureent-forecast px-6 py-11 bg-no-repeat bg-cover bg-center rounded-2xl md:flex md:items-center md:justify-between">
