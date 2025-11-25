@@ -1,4 +1,3 @@
-import iconSunny from "../assets/images/icon-sunny.webp";
 import { useWeatherData } from "../Context/WeatherDataContext";
 import { useWeatherApi } from "../Hooks/useWeatherApi";
 import { getWeatherIcon } from "../Utils/WeatherIconHelper";
@@ -62,7 +61,7 @@ export default function () {
     <section className="space-y-8 lg:space-y-11">
       <section className="cureent-forecast  bg-no-repeat bg-cover bg-center rounded-2xl ">
         {loading ? (
-          <Skeleton variant="currentForecast" className=""/>
+          <Skeleton variant="currentForecast" className="" />
         ) : (
           <div className="px-6 py-11 md:flex md:items-center md:justify-between">
             <div className="text-(length:--fs-28) font-bold text-center">
@@ -94,9 +93,13 @@ export default function () {
                 {card.title}
               </p>
               <div className="flex text-(length:--fs-32) font-light">
-                <p>
-                  {card.value} {card.unit}
-                </p>
+                {loading ? (
+                  <p>-</p>
+                ) : (
+                  <p>
+                    {card.value} {card.unit}
+                  </p>
+                )}
               </div>
             </div>
           );
