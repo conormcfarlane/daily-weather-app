@@ -1,9 +1,8 @@
-import iconDrizzle from "../assets/images/icon-drizzle.webp";
 import { useWeatherApi } from "../Hooks/useWeatherApi";
 import { getWeatherIcon } from "../Utils/WeatherIconHelper";
 import Skeleton from "./Skeleton";
 export default function DailyForecast() {
-  const { data, loading, error } = useWeatherApi();
+  const { data, loading} = useWeatherApi();
   const dailyWeather = data?.daily;
 
   return (

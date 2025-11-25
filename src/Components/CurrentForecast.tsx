@@ -6,11 +6,11 @@ import Skeleton from "./Skeleton";
 type currentWeatherCards = {
   title: string;
   value: number | undefined;
-  unit: any;
+  unit: string;
 };
 
-export default function () {
-  const { data, loading, error, location } = useWeatherApi();
+export default function CurrentForecast() {
+  const { data, loading, location } = useWeatherApi();
   const { units } = useWeatherData();
   const city = location?.name;
   const country = location?.country;

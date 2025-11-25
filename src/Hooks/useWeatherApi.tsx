@@ -87,5 +87,4 @@ export function useWeatherApi() {
     fetchWeatherData();
   }, [searchValue, units]);
   return { data, loading, error, location };
-  p;
 }

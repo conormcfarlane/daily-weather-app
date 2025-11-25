@@ -1,7 +1,23 @@
-import React from "react";
+type SkeletonVariant =
+  | "default"
+  | "currentForecast"
+  | "weatherCard"
+  | "hourlyItem"
+  | "dailyCard"
+  | "circle"
+  | "text"
+  | "textFull";
 
-export default function Skeleton({ variant = "default", className = "" }) {
-  const variants = {
+type SkeletonProps = {
+  variant?: SkeletonVariant;
+  className?: string;
+};
+
+export default function Skeleton({
+  variant = "default",
+  className = "",
+}: SkeletonProps) {
+  const variants: Record<SkeletonVariant, string> = {
     // Rectangular placeholder
     default: "h-4 w-full",
 
@@ -31,8 +47,9 @@ export default function Skeleton({ variant = "default", className = "" }) {
     <div
       className={`
         bg-(--color-neutral-700-hsl)
+        animate-pulse
         rounded-xl
-        ${variants[variant] || variants.default}
+        ${variants[variant]}
         ${className}
       `}
     />
